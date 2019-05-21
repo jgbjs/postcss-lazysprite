@@ -117,7 +117,7 @@ More examples with different options: [nameSpace](./examples/nameSpace.md), [out
 ## Installation
 
 ```bash
-npm install postcss-lazysprite --save
+npm install postcss-lazysprite-miniprogram --save
 ```
 
 ## Usage
@@ -129,7 +129,7 @@ Example:
 ```javascript
 var gulp = require('gulp');
 var postcss = require('gulp-postcss');
-var lazysprite = require('postcss-lazysprite');
+var lazysprite = require('postcss-lazysprite-miniprogram');
 
 gulp.task('css', function () {
 	return gulp.src('./test/src/css/**/*.css')
@@ -277,11 +277,11 @@ when set this option as `true`, the html sould like:
 
 Thanks the inspirations from [postcss-sprites](https://github.com/2createStudio/postcss-sprites) plugin.
 
-[Issues](https://github.com/Jeff2Ma/postcss-lazysprite/issues) and [Pull requests](https://github.com/Jeff2Ma/postcss-lazysprite/pulls) are welcome.
+[Issues](https://github.com/jgbjs/postcss-lazysprite-miniprogram/issues) and [Pull requests](https://github.com/jgbjs/postcss-lazysprite-miniprogram/pulls) are welcome.
 
 ```bash
-$ git clone https://github.com/Jeff2Ma/postcss-lazysprite
-$ cd postcss-lazysprite
+$ git clone https://github.com/jgbjs/postcss-lazysprite-miniprogram
+$ cd postcss-lazysprite-miniprogram
 $ npm i
 $ gulp # for dev
 $ gulp test # for test
