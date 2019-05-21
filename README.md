@@ -1,15 +1,16 @@
-# postcss-lazysprite
+# postcss-lazysprite-miniprogram
+
+forked from  [postcss-lazysprite](https://github.com/Jeff2Ma/postcss-lazysprite)
 
 <img align="right" width="130" height="130" title="PostCSS" src="http://postcss.github.io/postcss/logo.svg">
-
-[![Build Status](https://travis-ci.org/Jeff2Ma/postcss-lazysprite.svg?branch=master)](https://travis-ci.org/Jeff2Ma/postcss-lazysprite)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/Jeff2Ma/postcss-lazysprite?branch=master&svg=true)](https://ci.appveyor.com/project/Jeff2Ma/postcss-lazysprite)
-[![npm version](https://badge.fury.io/js/postcss-lazysprite.svg)](https://www.npmjs.com/package/postcss-lazysprite)
-[![change-log](https://img.shields.io/badge/changelog-md-blue.svg)](https://github.com/Jeff2Ma/postcss-lazysprite/blob/master/CHANGELOG.md)
 
 A [PostCSS](https://github.com/postcss/postcss) plugin that generates sprites from the directory of images automatically.
 
 A lazy way to generate sprites and proper CSS with retina support. Feel free to use it :)
+
+## Why
+
+Wechat miniprogram do not support local `background-image`, so we should upload it.
 
 ## Example
 
@@ -70,7 +71,7 @@ A lazy way to generate sprites and proper CSS with retina support. Feel free to 
 > Just a example for above output result, you can dynamic yourself with options.
 
 ```
-.			
+.
 ├── gulpfile.js
 ├── dist
 └── src
@@ -137,13 +138,35 @@ gulp.task('css', function () {
 			stylesheetInput: './test/src/css',
 			stylesheetRelative: './test/dist/css',
 			spritePath: './test/dist/slice',
-			nameSpace: 'icon-'
+			nameSpace: 'icon-',
+			upload: (filePath) => {
+				// uploadImage will return a uploaded url
+				return uploadImage(filePath)
+			}
 		})]))
 		.pipe(gulp.dest('./test/dist/css'));
 });
 ```
 
 ## Options
+
+#### upload
+
+> if you wanna upload sprite images
+
+- Type: Function
+- Default: null
+
+```js
+var uploadImage = require('free-upload-image')
+// demo
+lazysprite({
+	async upload(localfilepath) {
+		const url = await uploadImage(localfilepath)
+		return url
+	}
+})
+```
 
 #### imagePath
 
@@ -184,7 +207,7 @@ gulp.task('css', function () {
 #### logLevel
 
 > Deside which level to output log. Can be either "debug", "info", or "silent".
- 
+
 ```javascript
 // Show me additional info about the process
 logLevel: "debug"
