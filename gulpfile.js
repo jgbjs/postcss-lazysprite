@@ -16,23 +16,34 @@ gulp.task('lint', function () {
 });
 
 gulp.task('examples', function () {
-	return gulp.src('examples/*.js', {read: false})
-		.pipe(mocha({timeout: 1000000}));
+	return gulp.src('examples/*.js', {
+		read: false
+	})
+		.pipe(mocha({
+			timeout: 1000000
+		}));
 });
 
 gulp.task('htmlcopy', function () {
-	return gulp.src(['./examples/src/html/index.html'], {base: './examples/src/html/'})
+	return gulp.src(['./examples/src/html/index.html'], {
+		base: './examples/src/html/'
+	})
 		.pipe(gulp.dest('./examples/dist/html/'));
 });
 
 gulp.task('test', function () {
-	return gulp.src('test/*.js', {read: false})
-		.pipe(mocha({timeout: 1000000}));
+	return gulp.src('test/*.js', {
+		read: false
+	})
+		.pipe(mocha({
+			timeout: 1000000
+			// Fgrep: 'upload'
+		}));
 });
 
 gulp.task('css', function () {
 	return gulp.src('./examples/src/css/**/*.css')
-		// .pipe(sourcemaps.init())
+	// .pipe(sourcemaps.init())
 		.pipe(postcss([lazysprite({
 			imagePath: './examples/src/slice',
 			stylesheetInput: './examples/src/css',
@@ -42,7 +53,7 @@ gulp.task('css', function () {
 			nameSpace: 'icon-',
 			logLevel: 'debug'
 		})]))
-		// .pipe(sourcemaps.write("."))
+	// .pipe(sourcemaps.write("."))
 		.pipe(gulp.dest('./examples/dist/css'));
 });
 

@@ -114,6 +114,7 @@ module.exports = postcss.plugin('postcss-lazysprite', function (options) {
 		if (image.ratio > 1) {
 			return '@' + image.ratio + 'x';
 		}
+
 		return null;
 	});
 
@@ -236,7 +237,11 @@ function extractImages(css, options) {
 			image.selector = setSelector(image, options, atRuleValue[1]);
 
 			// Get absolute path of image
-			image.path = path.resolve(imageDir, filename);
+			if (isUrl()) {
+				image.path = filename;
+			} else {
+				image.path = path.resolve(imageDir, filename);
+			}
 
 			// For retina
 			if (isRetinaImage(image.name)) {
@@ -264,6 +269,7 @@ function applyGroupBy(images, options) {
 				if (group) {
 					image.groups.push(group);
 				}
+
 				return image;
 			}).catch(function (image) {
 				return image;
@@ -357,6 +363,7 @@ function setTokens(images, options, css) {
 			if (has2x) {
 				atRuleParent.insertBefore(atRule, mediaAtRule2x);
 			}
+
 			if (has3x) {
 				atRuleParent.insertBefore(atRule, mediaAtRule3x);
 			}
@@ -541,10 +548,25 @@ function saveSprites(images, options, sprites) {
 					return deferred.promise;
 				}
 
+				const filePath = sprite.path;
 				// Save new file version
 				return fs.writeFileAsync(sprite.path, Buffer.from(sprite.image, 'binary'))
 					.then(function () {
 						log(options.logLevel, 'lv2', ['Lazysprite:', colors.green(path.relative(process.cwd(), sprite.path)), 'generated.']);
+						// Upload image
+						if (typeof options.upload === 'function') {
+							try {
+								return Promise.resolve(options.upload(filePath))
+									.then(url => {
+										log(options.logLevel, 'lv2', ['Lazysprite:', colors.green('upload success'), url]);
+										sprite.path = url;
+										return sprite;
+									});
+							} catch (e) {
+								log(options.logLevel, 'lv1', ['Lazysprite upload:', colors.red(path.relative(process.cwd(), sprite.path)), 'upload failed.']);
+							}
+						}
+
 						return sprite;
 					});
 			})
@@ -614,8 +636,12 @@ function updateReferences(images, options, sprites, css) {
 					}
 
 					// Generate correct ref to the sprite
-					image.spriteRef = path.relative(image.stylesheetRelative, image.spritePath);
-					image.spriteRef = image.spriteRef.split(path.sep).join('/');
+					if (isUrl(image.spritePath)) {
+						image.spriteRef = image.spritePath;
+					} else {
+						image.spriteRef = path.relative(image.stylesheetRelative, image.spritePath);
+						image.spriteRef = image.spriteRef.split(path.sep).join('/');
+					}
 
 					backgroundImage = postcss.decl({
 						prop: 'background-image',
@@ -673,6 +699,7 @@ function getAtRuleValue(params) {
 		value = value.split('#');
 		return value;
 	}
+
 	array.push(value);
 	return array;
 }
@@ -687,6 +714,7 @@ function setSelector(image, options, dynamicBlock, retina) {
 		// If retina, then '@2x','@3x','_2x','_3x' will be removed.
 		basename = _.replace(basename, /[@_](\d)x$/, '');
 	}
+
 	var selector = (dynamicBlock ? dynamicBlock : image.dir) + options.cssSeparator + basename;
 	if (options.pseudoClass) {
 		if (image.name.toLowerCase().indexOf('hover') > -1 || image.name.toLowerCase().indexOf('active') > -1) {
@@ -696,6 +724,7 @@ function setSelector(image, options, dynamicBlock, retina) {
 			selector = _.replace(selector, '_active', ':active');
 		}
 	}
+
 	return selector;
 }
 
@@ -787,6 +816,7 @@ function getRetinaRatio(url) {
 	if (!matches) {
 		return 1;
 	}
+
 	var ratio = _.parseInt(matches[1]);
 	return ratio;
 }
@@ -797,6 +827,7 @@ function getRetinaInfix(name) {
 	if (!matches) {
 		return '@';
 	}
+
 	return matches[1];
 }
 
@@ -816,15 +847,18 @@ function log(logLevel, level, content) {
 		if (level !== 'lv1') {
 			output = false;
 		}
+
 		break;
 	case 'info':
 		if (level === 'lv3') {
 			output = false;
 		}
+
 		break;
 	default:
 		output = true;
 	}
+
 	if (output) {
 		var data = Array.prototype.slice.call(content);
 		fancyLog.apply(false, data);
@@ -835,4 +869,8 @@ function log(logLevel, level, content) {
 function debug() {
 	var data = Array.prototype.slice.call(arguments);
 	fancyLog.apply(false, data);
+}
+
+function isUrl(url) {
+	return /^https?/.test(url);
 }
