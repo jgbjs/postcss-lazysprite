@@ -1,6 +1,6 @@
 # postcss-lazysprite-miniprogram
 
-forked from  [postcss-lazysprite](https://github.com/Jeff2Ma/postcss-lazysprite)
+forked from [postcss-lazysprite](https://github.com/Jeff2Ma/postcss-lazysprite)
 
 <img align="right" width="130" height="130" title="PostCSS" src="http://postcss.github.io/postcss/logo.svg">
 
@@ -28,41 +28,41 @@ Wechat miniprogram do not support local `background-image`, so we should upload 
 ```CSS
 /* ./dist/css/index.css */
 .icon-filetype__excel {
-	background-image: url(../sprites/filetype.png);
-	background-position: 0 0;
-	width: 32px;
-	height: 32px;
+  background-image: url(../sprites/filetype.png);
+  background-position: 0 0;
+  width: 32px;
+  height: 32px;
 }
 .icon-filetype__pdf {
-	background-image: url(../sprites/filetype.svg);
-	background-position: 0 0;
-	width: 32px;
-	height: 32px;
+  background-image: url(../sprites/filetype.svg);
+  background-position: 0 0;
+  width: 32px;
+  height: 32px;
 }
 .icon-filetype__ppt {
-	background-image: url(../sprites/filetype.png);
-	background-position: -32px 0;
-	width: 32px;
-	height: 32px;
+  background-image: url(../sprites/filetype.png);
+  background-position: -32px 0;
+  width: 32px;
+  height: 32px;
 }
 .icon-filetype__word {
-	background-image: url(../sprites/filetype.svg);
-	background-position: -32px 0;
-	width: 32px;
-	height: 32px;
+  background-image: url(../sprites/filetype.svg);
+  background-position: -32px 0;
+  width: 32px;
+  height: 32px;
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio:2), only screen and (-o-min-device-pixel-ratio:2/1), only screen and (min-device-pixel-ratio:2), only screen and (min-resolution:2dppx), only screen and (min-resolution:192dpi) {
-	.icon-filetype__excel {
-		background-image: url(../sprites/filetype@2x.png);
-		background-position: 0 0;
-		background-size: 64px 32px;
-	}
-	.icon-filetype__ppt {
-		background-image: url(../sprites/filetype@2x.png);
-		background-position: -32px 0;
-		background-size: 64px 32px;
-	}
+  .icon-filetype__excel {
+    background-image: url(../sprites/filetype@2x.png);
+    background-position: 0 0;
+    background-size: 64px 32px;
+  }
+  .icon-filetype__ppt {
+    background-image: url(../sprites/filetype@2x.png);
+    background-position: -32px 0;
+    background-size: 64px 32px;
+  }
 }
 ```
 
@@ -113,7 +113,6 @@ More examples with different options: [nameSpace](./examples/nameSpace.md), [out
 
 <a href="https://weread.qq.com"><img width="104" height="32" title="Wechat Reader" src="./examples/src/slice/logo/WeRead@2x.png" alt="Wechat Reader"></a>
 
-
 ## Installation
 
 ```bash
@@ -131,20 +130,25 @@ var gulp = require('gulp');
 var postcss = require('gulp-postcss');
 var lazysprite = require('postcss-lazysprite-miniprogram');
 
-gulp.task('css', function () {
-	return gulp.src('./test/src/css/**/*.css')
-		.pipe(postcss([lazysprite({
-			imagePath:'./test/src/slice',
-			stylesheetInput: './test/src/css',
-			stylesheetRelative: './test/dist/css',
-			spritePath: './test/dist/slice',
-			nameSpace: 'icon-',
-			upload: (filePath) => {
-				// uploadImage will return a uploaded url
-				return uploadImage(filePath)
-			}
-		})]))
-		.pipe(gulp.dest('./test/dist/css'));
+gulp.task('css', function() {
+  return gulp
+    .src('./test/src/css/**/*.css')
+    .pipe(
+      postcss([
+        lazysprite({
+          imagePath: './test/src/slice',
+          stylesheetInput: './test/src/css',
+          stylesheetRelative: './test/dist/css',
+          spritePath: './test/dist/slice',
+          nameSpace: 'icon-',
+          upload: filePath => {
+            // uploadImage will return a uploaded url
+            return uploadImage(filePath);
+          }
+        })
+      ])
+    )
+    .pipe(gulp.dest('./test/dist/css'));
 });
 ```
 
@@ -158,14 +162,14 @@ gulp.task('css', function () {
 - Default: null
 
 ```js
-var uploadImage = require('free-upload-image')
+var uploadImage = require('free-upload-image');
 // demo
 lazysprite({
-	async upload(localfilepath) {
-		const url = await uploadImage(localfilepath)
-		return url
-	}
-})
+  async upload(localfilepath) {
+    const url = await uploadImage(localfilepath);
+    return url;
+  }
+});
 ```
 
 #### imagePath
@@ -174,7 +178,6 @@ lazysprite({
 
 - Default: null
 - Required: `true`
-
 
 #### stylesheetInput
 
@@ -210,13 +213,13 @@ lazysprite({
 
 ```javascript
 // Show me additional info about the process
-logLevel: "debug"
+logLevel: 'debug';
 
 // Just show basic info
-logLevel: "info"
+logLevel: 'info';
 
 // output NOTHING except alert
-logLevel: "silent"
+logLevel: 'silent';
 ```
 
 - Default: `info`
@@ -231,7 +234,7 @@ logLevel: "silent"
 
 #### retinaInfix
 
-> Deside the created sprite retina file is whether '@2x' or '_2x' as part of name.
+> Deside the created sprite retina file is whether '@2x' or '\_2x' as part of name.
 
 - Default: `@`
 - Required: `false`
@@ -242,10 +245,10 @@ logLevel: "silent"
 
 ```css
 .icon-filetype {
-    display: inline-block;
-    overflow: hidden;
-    font-size: 0;
-    line-height: 0;
+  display: inline-block;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
 }
 ```
 
@@ -260,7 +263,7 @@ when set this option as `true`, the html sould like:
 
 #### pseudoClass
 
-> If the file naming with `Hover`or `Active` as suffix，it will turn to   the `:hover` or `:active` pseudo class.([example](./examples/pseudoClass.md))
+> If the file naming with `Hover`or `Active` as suffix，it will turn to the `:hover` or `:active` pseudo class.([example](./examples/pseudoClass.md))
 
 - Default: `false`
 - Required: `false`
@@ -271,7 +274,6 @@ when set this option as `true`, the html sould like:
 
 - Default: `true`
 - Required: `false`
-
 
 ## Contributing
 
