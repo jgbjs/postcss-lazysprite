@@ -172,6 +172,25 @@ lazysprite({
 });
 ```
 
+### usePseudoBefore
+
+> use :before set props
+
+- Type: Boolean
+- Default: false
+
+```css
+.icon-filetype__test {
+  position: relative;
+}
+.icon-filetype__test:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
 #### imagePath
 
 > Relative path to the folder that sprite images are stored. For resolving absolute images. This option also as the base relative to the value of `@lazysprite` which is what you output.
