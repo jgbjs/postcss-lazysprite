@@ -1,11 +1,13 @@
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-unused-vars */
 var should = require('should');
 var fs = require('fs');
 var path = require('path');
 var vfs = require('vinyl-fs');
 var through2 = require('through2');
 var postcss = require('gulp-postcss');
-var uploadImage = require('free-upload-image')
-var noop = function() {};
+var uploadImage = require('free-upload-image');
+var noop = function () {};
 var lazysprite = require('../index.js');
 
 /**
@@ -21,23 +23,23 @@ var lazysprite = require('../index.js');
  * - In @lazysprite atrule value, single quotes (') and double quotes (") are both support.(not need)
  */
 
-describe('postcss-lazysprite Unit Test', function() {
-  describe('Basic Functions', function() {
+describe('postcss-lazysprite Unit Test', function () {
+  describe('Basic Functions', function () {
     // Delete dist dir before testing evertime.
 
-    before(function(done) {
-      fs.mkdir('./test/dist', function(err) {
+    before(function (done) {
+      fs.mkdir('./test/dist', function (err) {
         done();
       });
     });
 
-    afterEach(function(done) {
-      fs.rmdir('./test/dist', function(err) {
+    afterEach(function (done) {
+      fs.rmdir('./test/dist', function (err) {
         done();
       });
     });
 
-    it('Create normal sprites -> should create correct css content and images files.', function(done) {
+    it('Create normal sprites -> should create correct css content and images files.', function (done) {
       vfs.src('./test/src/css/test.1.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -46,7 +48,7 @@ describe('postcss-lazysprite Unit Test', function() {
           spritePath: './test/dist/sprites',
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           // Fs.writeFileSync('./test/src/css/test.1.excepted.css', content, 'utf8');
           var cssExpected = fs.readFileSync(path.resolve(process.cwd(), './test/src/css/test.1.excepted.css'), {
@@ -64,7 +66,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('Create svg sprites (even if mix with png files) -> should create correct css content & files.', function(done) {
+    it('Create svg sprites (even if mix with png files) -> should create correct css content & files.', function (done) {
       vfs.src('./test/src/css/test.8.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -73,9 +75,9 @@ describe('postcss-lazysprite Unit Test', function() {
           spritePath: './test/dist/sprites',
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
-          // fs.writeFileSync('./test/src/css/test.8.excepted.css', content, 'utf8');
+          // Fs.writeFileSync('./test/src/css/test.8.excepted.css', content, 'utf8');
           var cssExpected = fs.readFileSync(path.resolve(process.cwd(), './test/src/css/test.8.excepted.css'), {
             encoding: 'utf8'
           });
@@ -93,7 +95,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('Retina support -> should @2x and _2x are all work well.', function(done) {
+    it('Retina support -> should @2x and _2x are all work well.', function (done) {
       vfs.src('./test/src/css/test.2.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -102,7 +104,7 @@ describe('postcss-lazysprite Unit Test', function() {
           spritePath: './test/dist/sprites',
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           // Fs.writeFileSync('./test/src/css/test.2.excepted.css', content, 'utf8');
           var cssExpected = fs.readFileSync(path.resolve(process.cwd(), './test/src/css/test.2.excepted.css'), {
@@ -121,7 +123,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('Multi `@lazysprite` atRule -> should work with multi `@lazysprite` atRule.', function(done) {
+    it('Multi `@lazysprite` atRule -> should work with multi `@lazysprite` atRule.', function (done) {
       var cssExpected = fs.readFileSync(path.resolve(process.cwd(), './test/src/css/test.4.excepted.css'), {
         encoding: 'utf8'
       });
@@ -134,7 +136,7 @@ describe('postcss-lazysprite Unit Test', function() {
           spritePath: './test/dist/sprites',
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           // Fs.writeFileSync('./test/src/css/test.4.excepted.css', content, 'utf8');
           cssExpected.should.be.equal(content);
@@ -144,7 +146,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('Dynamic selector block name -> should work well with dynamic selector block name.', function(done) {
+    it('Dynamic selector block name -> should work well with dynamic selector block name.', function (done) {
       vfs.src('./test/src/css/test.5.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -153,7 +155,7 @@ describe('postcss-lazysprite Unit Test', function() {
           spritePath: './test/dist/sprites',
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           content.match(/newBlockName/g).length.should.equal(4);
           cb();
@@ -162,7 +164,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('`:hover` and `:active` support -> should work with `Hover` in single image name.', function(done) {
+    it('`:hover` and `:active` support -> should work with `Hover` in single image name.', function (done) {
       vfs.src('./test/src/css/test.6.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -172,7 +174,7 @@ describe('postcss-lazysprite Unit Test', function() {
           pseudoClass: true,
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           content.match(/:hover/g).length.should.equal(2);
           cb();
@@ -181,7 +183,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('Second depth directory css files -> should work well.', function(done) {
+    it('Second depth directory css files -> should work well.', function (done) {
       vfs.src('./test/src/css/second/test.8.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -191,7 +193,7 @@ describe('postcss-lazysprite Unit Test', function() {
           pseudoClass: true,
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           content.match(/\.\.\/\.\.\/s/g).length.should.equal(4);
           cb();
@@ -201,49 +203,49 @@ describe('postcss-lazysprite Unit Test', function() {
     });
   });
 
-  describe('Options Functions', function() {
-    before(function(done) {
-      fs.mkdir('./test/dist', function(err) {
+  describe('Options Functions', function () {
+    before(function (done) {
+      fs.mkdir('./test/dist', function (err) {
         done();
       });
     });
 
-    afterEach(function(done) {
-      fs.rmdir('./test/dist', function(err) {
+    afterEach(function (done) {
+      fs.rmdir('./test/dist', function (err) {
         done();
       });
     });
 
-    after(function(done) {
-      fs.rmdir('./test/dist', function(err) {
+    after(function (done) {
+      fs.rmdir('./test/dist', function (err) {
         done();
       });
-		});
+    });
 
-		it('`upload` opiton-> should work well.', function(done) {
+    it('`upload` opiton-> should work well.', function (done) {
       vfs.src('./test/src/css/test.9.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
           stylesheetInput: './test/src/css',
           stylesheetRelative: './test/dist/css',
           spritePath: './test/dist/sprites',
-          upload: function(filePath) {
+          upload: function (filePath) {
             return uploadImage(filePath)
-              .then(url => url, () => filePath)
+              .then(url => url, () => filePath);
           },
           logLevel: 'info' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
-					var content = file.contents.toString();
+        .pipe(through2.obj(function (file, enc, cb) {
+          var content = file.contents.toString();
 
-					content.match(/url\(https:/g).length.should.equal(2);
+          content.match(/url\(https:/g).length.should.equal(2);
           cb();
         }))
         .on('data', noop)
         .on('end', done);
-    })
+    });
 
-    it('`nameSpace`  option -> should work well.', function(done) {
+    it('`nameSpace`  option -> should work well.', function (done) {
       vfs.src('./test/src/css/test.1.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -253,7 +255,7 @@ describe('postcss-lazysprite Unit Test', function() {
           nameSpace: 'ww_',
           logLevel: 'slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           content.match(/ww_/g).length.should.equal(4);
           cb();
@@ -262,7 +264,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('`outputDimensions`  option -> should work well.', function(done) {
+    it('`outputDimensions`  option -> should work well.', function (done) {
       vfs.src('./test/src/css/test.3.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -272,7 +274,7 @@ describe('postcss-lazysprite Unit Test', function() {
           outputDimensions: false,
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           content.match(/width/g).length.should.equal(1);
           content.match(/height/g).length.should.equal(1);
@@ -282,7 +284,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('`retinaInfix` opiton-> should work well.', function(done) {
+    it('`retinaInfix` opiton-> should work well.', function (done) {
       vfs.src('./test/src/css/test.7.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -292,7 +294,7 @@ describe('postcss-lazysprite Unit Test', function() {
           retinaInfix: '_',
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           // Var content = file.contents.toString();
           var spritesExists1 = fs.existsSync(path.resolve(process.cwd(), './test/dist/sprites/check.png'));
           var spritesExists2 = fs.existsSync(path.resolve(process.cwd(), './test/dist/sprites/check_2x.png'));
@@ -304,7 +306,7 @@ describe('postcss-lazysprite Unit Test', function() {
         .on('end', done);
     });
 
-    it('`outputExtralCSS` opiton-> should work well.', function(done) {
+    it('`outputExtralCSS` opiton-> should work well.', function (done) {
       vfs.src('./test/src/css/test.1.css')
         .pipe(postcss([lazysprite({
           imagePath: './test/src/slice',
@@ -314,12 +316,36 @@ describe('postcss-lazysprite Unit Test', function() {
           outputExtralCSS: true,
           logLevel: 'slient' // 'debug','info','slient'
         })]))
-        .pipe(through2.obj(function(file, enc, cb) {
+        .pipe(through2.obj(function (file, enc, cb) {
           var content = file.contents.toString();
           content.match(/display: inline-block/g).length.should.equal(1);
           content.match(/overflow: hidden/g).length.should.equal(1);
           content.match(/font-size: 0/g).length.should.equal(1);
           content.match(/line-height: 0/g).length.should.equal(1);
+          cb();
+        }))
+        .on('data', noop)
+        .on('end', done);
+    });
+
+    it('`usePseudoBefore` opiton-> should work well.', function (done) {
+      vfs.src('./test/src/css/test.9.css')
+        .pipe(postcss([lazysprite({
+          imagePath: './test/src/slice',
+          stylesheetInput: './test/src/css',
+          stylesheetRelative: './test/dist/css',
+          spritePath: './test/dist/sprites',
+          usePseudoBefore: true,
+          logLevel: 'slient' // 'debug','info','slient'
+        })]))
+        .pipe(through2.obj(function (file, enc, cb) {
+          var content = file.contents.toString();
+          content.match(/position: absolute/g).length.should.equal(2);
+          content.match(/position: relative/g).length.should.equal(2);
+          content.match(/:before/g).length.should.equal(2);
+          content.match(/content: ''/g).length.should.equal(2);
+          content.match(/transform-origin: top left/g).length.should.equal(2);
+          // Console.log(content);
           cb();
         }))
         .on('data', noop)

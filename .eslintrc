@@ -3,9 +3,9 @@
 	"rules": {
 		"indent": [
 			"error",
-			"tab"
+			2
 		],
-		"one-var": ["error", { uninitialized: "always", initialized: "never" }],
+		"one-var": ["error", { "uninitialized": "always", "initialized": "never" }],
 		"space-infix-ops": ["error", {"int32Hint": false}],
 		"no-unused-vars": ["error", { "varsIgnorePattern": "[debugetBaseNameisPNG]" }],
 		"valid-jsdoc": 0
