@@ -159,7 +159,7 @@ gulp.task('css', function() {
 > if you wanna upload sprite images
 
 - Type: Function
-- Default: null
+- Default: `null`
 
 ```js
 var uploadImage = require('free-upload-image');
@@ -177,7 +177,7 @@ lazysprite({
 > use :before set props
 
 - Type: Boolean
-- Default: false
+- Default: `false`
 
 ```css
 .icon-filetype__test {
@@ -190,6 +190,7 @@ lazysprite({
   left: 0;
   transform-origin: top left;
 }
+```
 
 #### imagePath
 
